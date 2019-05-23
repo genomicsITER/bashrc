@@ -1,0 +1,331 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+#
+# HISTSIZE description
+# The maximum number of commands to remember on the history list.
+# If the value is 0, commands are not saved** in the history list. 
+# Numeric values less than zero result in every command being saved on the history list (there is no limit). 
+# HISTSIZE=1000
+HISTSIZE=-1
+#
+# HISTFILESIZE description
+# Non-numeric values and numeric values less than zero inhibit truncation.
+# HISTFILESIZE=2000
+HISTFILESIZE=-1
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Path to BWA aligner
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/bwa-0.7.10
+
+# Path to samtools
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/samtools-1.2
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/samtools-1.2
+
+# Path to bcftools
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/bcftools-1.2
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/bcftools-1.4
+
+# Path to HTSlib
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/htslib-1.2.1
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/htslib-1.4
+
+# Path to picard-tools
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/picard-tools-1.119
+# export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/picard-tools-1.119
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/picard-2.9.0
+
+
+# Path to FastQC:
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/FastQC/fastqc
+
+# Path to GATK:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/GATK-3.3-0
+
+# path to VCFtools:
+# export PERL5LIB=/home/jlorsal/Escritorio/drago/apps/vcftools_0.1.12b/perl
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/vcftools_0.1.12b/bin
+# export PERL5LIB=/home/jlorsal/Desktop/drago/apps/vcftools_0.1.12b/perl
+# export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/vcftools_0.1.12b/bin
+export PERL5LIB=/home/jlorsal/Desktop/drago/apps/vcftools_0.1.14-31/perl
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/vcftools_0.1.14-31/bin
+
+# path to BEDtools:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/bedtools-2.17.0
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/bedtools2
+
+# path to PLINK:
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/plink-1.07-x86_64
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/plink-1.07-x86_64
+
+# path to LASER:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/LASER_2.01
+
+# path to HAPLOVIEW:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/haploview
+
+# path to HAPLOVIEW:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/fcgene-1.0.7
+
+# path to EIGENSOFT "master":
+export PATH=$PATH:/opt/EIG-6.1.4/bin
+
+# path to IGV:
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/IGV_2.3.34
+
+# path to ANNOVAR:
+#export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/annovar
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/annovar
+#export PATH=$PATH:/media/jlorsal/drago/annovar2016
+
+# path to somatypus:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/somatypus/src
+
+# path to somatypus:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/somatypus/src
+
+# path to platypus:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/Platypus_0.8.1
+
+# path to sambamba:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/sambamba
+
+# path to permanently add the compilers to your system’s path. See https://solarianprogrammer.com/2014/08/26/building-gcc-on-ubuntu-linux/
+export PATH=$PATH:/usr/gcc_4_9/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/gcc_4_9/lib:/usr/gcc_4_9/lib64
+
+# path to locate python3 if necessary:
+export PATH=$PATH:/usr/local/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+
+# path to ProABEL:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/probabel-0.5.0
+
+# path to EPACTS:
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/EPACTS-3.2.6
+
+# path to VarSeq:VarSeq
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/VarSeq
+
+# path to qualimap
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/qualimap_v2.1
+
+# path to MetaSoft
+# export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/metasoft
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/metasoft
+
+# path to snpEff
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/snpEff
+
+# path to METASOFT
+export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/metasoft
+
+# path to matlab
+export PATH=$PATH:/media/jlorsal/drago/matlab/bin
+
+# path to Affimetrix APT tools
+#export PATH=$PATH:/home/jlorsal/Escritorio/AffyPipe/AFFYTOOLS/apt-1.19.0-x86_64-intel-linux/bin
+#export PATH=$PATH:/home/jlorsal/Escritorio/drago/apps/AffyPipe/AFFYTOOLS/apt-1.16.0-x86_64-intel-linux/bin
+export PATH=$PATH:/media/jlorsal/drago/Affy_fnl/AFFYTOOLS/apt-1.19.0-x86_64-intel-linux/bin
+
+# path to DosageConverter (Abecasis Lab)
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/DosageConvertor
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/DosageConvertor/bin
+
+# path to agilentreadtrimmer
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/AgilentReadTrimmer
+
+# path to seqtk
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/seqtk
+
+# path to exomeCQA and genIndex
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/ExomeCQA
+
+# path to mixPainter
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/mixPainter
+
+# path to chromoPainter
+export PATH=$PATH:/opt/chromopainter-0.0.4
+
+# path to ALDER
+export PATH=$PATH:/opt/alder
+
+# path to mosdepth
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/mosdepth
+
+# path to ELAI
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/elai-lin
+
+# path to PSMC
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/psmc
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/psmc/utils
+
+# path to BaseSpace-CLI (Command Line Interface)
+export PATH=$PATH:/home/jlorsal/bin/bs
+export PATH=$PATH:/home/jlorsal/bin/bs-cp
+
+# path to SHAPEIT
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/shapeit.v2.904.3.10.0-693.11.6.el7.x86_64/bin
+
+# path to selection_stats
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/selection_stats
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/selection_stats/src
+
+# path to ANGSD
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/angsd
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/angsd/misc
+
+# path to ms Hudson
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/ms
+
+# path to STRELKA
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/strelka-2.9.2.centos6_x86_64/bin
+
+# path to MANTA
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/manta-1.4.0.centos6_x86_64/bin
+
+# path to ILMN PISCES
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/Pisces_5.2.7.47
+
+# path to iSAFE
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/iSAFE/src
+
+# path to CORTEX analyse-variants bioinfo-perl
+export PERL5LIB=/home/jlorsal/Desktop/drago/apps/CORTEX_release_v1.0.5.21/scripts/analyse_variants/bioinf-perl/lib
+export PERL5LIB=/home/jlorsal/Desktop/drago/apps/CORTEX_release_v1.0.5.21/scripts/calling
+
+# path to interop de IMLN BaseSpace para usar como módulo de MultiQC
+# Con summary obtenemos el "summary" tab de ILMN SAV en formato CSV para poder abrir con MultiQC
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/interop/src/apps
+
+# path to ELAI
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/elai
+
+# path to fastq-join
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/fastq-join
+
+# path to RAiSD
+export PATH=$PATH:/home/jlorsal/Desktop/drago/apps/RAiSD/raisd-master/bin/release
+
+# set PATH so that it includes user's private bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="${PATH+$PATH:}$HOME/.local/bin"
+fi
+
+# NO OLViDAR HACER "source ~/.bashrc" al terminar de editar este fichero
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/jlorsal/.sdkman"
+[[ -s "/home/jlorsal/.sdkman/bin/sdkman-init.sh" ]] && source "/home/jlorsal/.sdkman/bin/sdkman-init.sh"
+
+# added by Miniconda3 installer
+export PATH="/home/jlorsal/Desktop/drago/apps/miniconda3/bin:$PATH"
